@@ -5,49 +5,82 @@ void main() {
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({Key? key}) : super(key: key);
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      // Define a theme for the application
+      title: 'Lista de Tarefas',
+
+      debugShowCheckedModeBanner: false,
+
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        brightness: Brightness.light,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 231, 231, 231),
       ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.deepPurple,
-      ),
-      themeMode: ThemeMode.system, // Use system theme by default
+
       home: const HomePage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        title: Text(
+          'Lista de Tarefas',
+          style: TextStyle(
+            color: Colors.blue,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
       ),
-      body: Center(
+
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'Welcome to Flutter Demo!',
-              style: TextStyle(fontSize: 24),
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Digite uma tarefa',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8.0),
+                ElevatedButton(onPressed: () {}, child: Text('Adicionar')),
+              ],
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: null, // Add your own functionality here
-              child: Text('Click Me'),
+            SizedBox(height: 12.0),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, index){
+                  return Card(
+                    child: ListTile(
+                      title: Text('Tarefa ${index + 1}'),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: (){},
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
