@@ -31,6 +31,41 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  final TextEditingController tarefasController = TextEditingController();
+
+
+  List<String> tarefas = [];
+
+  void adicionarTarefa(){
+    if(tarefasController.text.isEmpty){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Erro na operação"),
+            content: (Text("Não é possível adicionar uma tarefa vazia!")),
+          );
+        }
+      );
+
+      return;
+
+    }
+
+    setState(() {
+      tarefas.add(tarefasController.text);
+    });
+
+    tarefasController.clear();
+  }
+
+  void removerTarefa(int index){
+      setState(() {
+        tarefas.removeAt(index);
+      });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -53,6 +88,9 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Expanded(
                   child: TextField(
+
+                    controller: tarefasController,
+
                     decoration: InputDecoration(
                       hintText: 'Digite uma tarefa',
                       border: OutlineInputBorder(
@@ -62,20 +100,26 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(width: 8.0),
-                ElevatedButton(onPressed: () {}, child: Text('Adicionar')),
+                ElevatedButton(onPressed: () {
+                  adicionarTarefa();
+                }, child: Text('Adicionar')),
               ],
             ),
             SizedBox(height: 12.0),
             Expanded(
               child: ListView.builder(
-                itemCount: 10,
+                itemCount: tarefas.length,
                 itemBuilder: (context, index){
                   return Card(
                     child: ListTile(
-                      title: Text('Tarefa ${index + 1}'),
+
+                      
+                      title: Text(tarefas[index]),
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
-                        onPressed: (){},
+                        onPressed: (){
+                          removerTarefa(index);
+                        },
                       ),
                     ),
                   );
